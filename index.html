@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome!</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f1f0;
-            text-align: center;
-        }
-        .container {
-            margin-top: 20%;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Rocket Takeoff Animation -->
+    <div class="rocket-container">
+        <div class="rocket" id="rocket">
+            <img src="rocket.png" alt="Rocket">
+        </div>
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
         <h1>👋 Welcome!</h1>
         <p>I'm a multidisciplinary enthusiast with skills in:</p>
@@ -25,6 +24,29 @@
             <li>Design (UI/UX, Graphic)</li>
         </ul>
         <p>🚀 Passionate about space exploration and its limitless possibilities!</p>
+
+        <!-- Buttons for Work Experience and Projects -->
+        <div class="buttons">
+            <button id="work-btn">Work Experience</button>
+            <button id="projects-btn">Open Projects</button>
+        </div>
+
+        <!-- Modals for Work Experience and Projects -->
+        <div class="modal" id="work-modal">
+            <h2>Work Experience</h2>
+            <!-- Add your work experience description here -->
+            <p id="work-description">ADD YOUR WORK EXPERIENCE DESCRIPTION HERE</p>
+            <button id="close-work-modal">Close</button>
+        </div>
+
+        <div class="modal" id="projects-modal">
+            <h2>Open Projects</h2>
+            <!-- Add your project descriptions here -->
+            <p id="projects-description">ADD YOUR PROJECT DESCRIPTIONS HERE</p>
+            <button id="close-projects-modal">Close</button>
+        </div>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
