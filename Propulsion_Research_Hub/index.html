@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propulsion Research Hub | Aerospace Discovery Engine</title>
+    <meta name="description" content="Centralized aggregator for space propulsion research papers, journals, and conferences.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg-dark: #050508;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --accent-gradient: linear-gradient(135deg, #00f2ff 0%, #7000ff 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: url('nebula.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.6) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            font-weight: 300;
+        }
+
+        /* Search Section */
+        .search-console {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .search-console:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 242, 255, 0.3);
+        }
+
+        .search-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 18px 25px;
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .btn-search {
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 0 35px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-search:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+
+        /* Source Switches */
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .source-tag {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .source-tag.active {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .source-tag input {
+            display: none;
+        }
+
+        /* Results Area */
+        .results-section {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 30px;
+        }
+
+        #results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .paper-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paper-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .paper-card::after {
+            content: 'OPEN ACCESS';
+            position: absolute;
+            top: 20px; right: -30px;
+            background: #00ca9d;
+            color: white;
+            font-size: 0.7rem;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-weight: 800;
+        }
+
+        .paper-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+            line-height: 1.3;
+        }
+
+        .paper-meta {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .paper-abstract {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #ccc;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .btn-view {
+            display: inline-block;
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        /* Sidebar Journals */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .journal-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .journal-card:hover {
+            background: var(--accent-gradient);
+            transform: scale(1.02);
+            border-color: transparent;
+        }
+
+        .journal-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .journal-icon {
+            opacity: 0.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: var(--primary);
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .results-section {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Propulsion Research Hub</h1>
+        <p class="subtitle">Unified Access to Global Aerospace & Propulsion Literature</p>
+    </header>
+
+    <div class="search-console">
+        <div class="search-input-group">
+            <input type="text" id="main-search" placeholder="Enter keywords (e.g., Hall Thruster, Nuclear Thermal Propulsion)..." autofocus>
+            <button class="btn-search" onclick="handleSearch()">Explore</button>
+        </div>
+
+        <div class="source-grid">
+            <label class="source-tag active">
+                <input type="checkbox" checked data-source="arxiv">
+                <span>ArXiv (Open)</span>
+            </label>
+            <label class="source-tag active">
+                <input type="checkbox" checked data-source="scienedirect">
+                <span>ScienceDirect</span>
+            </label>
+            <label class="source-tag active">
+                <input type="checkbox" checked data-source="aiaa">
+                <span>AIAA ARC</span>
+            </label>
+            <label class="source-tag active">
+                <input type="checkbox" checked data-source="ieee">
+                <span>IEEE Xplore</span>
+            </label>
+            <label class="source-tag active">
+                <input type="checkbox" checked data-source="nasa">
+                <span>NASA NTRS</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="results-section">
+        <div id="main-feed">
+            <h2 style="margin-bottom: 25px; font-weight: 800; font-size: 1.8rem;">Research discovery</h2>
+            <div id="loading" class="loading-spinner">Searching the cosmos...</div>
+            <div id="results-container">
+                <!-- Results dynamic injection -->
+                <div class="paper-card">
+                    <div class="paper-title">Welcome to the Propulsion Explorer</div>
+                    <p class="paper-abstract">Search across multiple journals simultaneously. Results from ArXiv will appear here directly, while publisher links will open in new specialized tabs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--text-dim);">Direct Journal Links</h3>
+            
+            <a href="https://arc.aiaa.org/" target="_blank" class="journal-card">
+                <span class="journal-name">AIAA ARC</span>
+                <span class="journal-icon">↗</span>
+            </a>
+            <a href="https://www.sciencedirect.com/journal/acta-astronautica" target="_blank" class="journal-card">
+                <span class="journal-name">Acta Astronautica</span>
+                <span class="journal-icon">↗</span>
+            </a>
+            <a href="https://ieeexplore.ieee.org/xpl/conhome/1000001/all-proceedings" target="_blank" class="journal-card">
+                <span class="journal-name">IEEE Aerospace</span>
+                <span class="journal-icon">↗</span>
+            </a>
+            <a href="https://ntrs.nasa.gov/" target="_blank" class="journal-card">
+                <span class="journal-name">NASA NTRS</span>
+                <span class="journal-icon">↗</span>
+            </a>
+            <a href="https://www.nature.com/nature" target="_blank" class="journal-card">
+                <span class="journal-name">Nature Space</span>
+                <span class="journal-icon">↗</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Toggle active state for tags
+    document.querySelectorAll('.source-tag input').forEach(input => {
+        input.addEventListener('change', (e) => {
+            e.target.parentElement.classList.toggle('active', e.target.checked);
+        });
+    });
+
+    async function handleSearch() {
+        const query = document.getElementById('main-search').value.trim();
+        if (!query) return;
+
+        const resultsContainer = document.getElementById('results-container');
+        const loading = document.getElementById('loading');
+        
+        resultsContainer.innerHTML = '';
+        loading.classList.add('active');
+
+        const sources = Array.from(document.querySelectorAll('.source-tag input:checked'))
+                             .map(i => i.dataset.source);
+
+        // ArXiv API integration
+        if (sources.includes('arxiv')) {
+            fetchArxiv(query);
+        }
+
+        // External routing
+        if (sources.includes('scienedirect')) {
+            window.open(`https://www.sciencedirect.com/search?qs=${encodeURIComponent(query)}`, '_blank');
+        }
+        if (sources.includes('aiaa')) {
+            window.open(`https://arc.aiaa.org/action/doSearch?AllField=${encodeURIComponent(query)}`, '_blank');
+        }
+        if (sources.includes('ieee')) {
+            window.open(`https://ieeexplore.ieee.org/search/searchresult.jsp?newsearch=true&queryText=${encodeURIComponent(query)}`, '_blank');
+        }
+        if (sources.includes('nasa')) {
+            window.open(`https://ntrs.nasa.gov/search?q=${encodeURIComponent(query)}`, '_blank');
+        }
+    }
+
+    async function fetchArxiv(query) {
+        const loading = document.getElementById('loading');
+        const resultsContainer = document.getElementById('results-container');
+
+        try {
+            // ArXiv API (public CORS proxy or direct if supported)
+            // Using a simple query for propulsion related papers
+            const apiUrl = `https://export.arxiv.org/api/query?search_query=all:${encodeURIComponent(query)}&start=0&max_results=10&sortBy=relevance&sortOrder=descending`;
+            
+            const response = await fetch(apiUrl);
+            const data = await response.text();
+            
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(data, "text/xml");
+            const entries = xmlDoc.getElementsByTagName("entry");
+
+            if (entries.length === 0) {
+                resultsContainer.innerHTML += '<div class="paper-card">No open access results found on ArXiv for this query.</div>';
+            }
+
+            for (let entry of entries) {
+                const title = entry.getElementsByTagName("title")[0].textContent;
+                const summary = entry.getElementsByTagName("summary")[0].textContent;
+                const authors = Array.from(entry.getElementsByTagName("author")).map(a => a.textContent).join(', ');
+                const link = entry.getElementsByTagName("id")[0].textContent;
+                const published = new Date(entry.getElementsByTagName("published")[0].textContent).toLocaleDateString();
+
+                const card = `
+                    <div class="paper-card">
+                        <div class="paper-title">${title}</div>
+                        <div class="paper-meta">
+                            <span>📅 ${published}</span>
+                            <span>👤 ${authors.split(',').slice(0, 2).join(',')}...</span>
+                        </div>
+                        <p class="paper-abstract">${summary}</p>
+                        <a href="${link}" target="_blank" class="btn-view">Read Full Paper</a>
+                    </div>
+                `;
+                resultsContainer.innerHTML += card;
+            }
+        } catch (error) {
+            console.error('Error fetching ArXiv:', error);
+            resultsContainer.innerHTML += '<div class="paper-card" style="border-color: #ff4d4d; color: #ff4d4d;">Failed to fetch from ArXiv. It may be a temporary network issue.</div>';
+        } finally {
+            loading.classList.remove('active');
+        }
+    }
+
+    // Allow enter key search
+    document.getElementById('main-search').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSearch();
+    });
+</script>
+
+</body>
+</html>
